@@ -1,38 +1,63 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Transactions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public BasicMovement basicMovement;
+    public BasicShoot basicShoot;
+    public InputUtil inputUtil;
+
+    public Transform target;
     KControls controls;
+
+    public Transform test;
+
 
     void Awake()
     {
+        this.basicShoot = GetComponentInChildren<BasicShoot>();
         controls = new KControls();
         controls.InGame.Enable();
     }
 
     void OnEnable()
     {
-        controls.InGame.Move.started += OnMoveStarted;
-        controls.InGame.Move.performed += OnMovePerfomed;
+        controls.InGame.Move.started += OnMove;
+        controls.InGame.Move.performed += OnMove;
+        controls.InGame.LockTarget.started += OnLockTarget;
     }
+
+
 
     void OnDisable()
     {
-        controls.InGame.Move.started -= OnMoveStarted;
-        controls.InGame.Move.performed -= OnMovePerfomed;
+        controls.InGame.Move.started -= OnMove;
+        controls.InGame.Move.performed -= OnMove;
+        controls.InGame.LockTarget.started -= OnLockTarget;
+
     }
 
-    private void OnMoveStarted(InputAction.CallbackContext obj)
+    private void OnMove(InputAction.CallbackContext ctx)
     {
-        Debug.Log("started");
+        if (ctx.started)
+        {
+            basicMovement.SetMovementTargetPosition(inputUtil.CursorInWorldSpace);
+        }
     }
-    private void OnMovePerfomed(InputAction.CallbackContext obj)
+    private void OnLockTarget(InputAction.CallbackContext obj)
     {
-        Debug.Log("performed");
+        //EnemyClickableLogic
+
+        basicMovement.SetRotationTargetPosition(this.target);
+        this.basicShoot.Shoot();
+
+    }
+
+    public void SetTarget()
+    {
+        this.target = this.target;
     }
 
 

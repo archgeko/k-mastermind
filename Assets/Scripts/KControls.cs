@@ -37,13 +37,13 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Rotate"",
+                    ""name"": ""LockTarget"",
                     ""type"": ""Button"",
                     ""id"": ""ce6497a1-1f15-4fa7-9b45-1bab711d3bc3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -61,11 +61,11 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d6b32b5b-ed1e-4753-a865-c34bd0fa3743"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Rotate"",
+                    ""action"": ""LockTarget"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -77,7 +77,7 @@ public partial class @KControls : IInputActionCollection2, IDisposable
         // InGame
         m_InGame = asset.FindActionMap("InGame", throwIfNotFound: true);
         m_InGame_Move = m_InGame.FindAction("Move", throwIfNotFound: true);
-        m_InGame_Rotate = m_InGame.FindAction("Rotate", throwIfNotFound: true);
+        m_InGame_LockTarget = m_InGame.FindAction("LockTarget", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -138,13 +138,13 @@ public partial class @KControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_InGame;
     private IInGameActions m_InGameActionsCallbackInterface;
     private readonly InputAction m_InGame_Move;
-    private readonly InputAction m_InGame_Rotate;
+    private readonly InputAction m_InGame_LockTarget;
     public struct InGameActions
     {
         private @KControls m_Wrapper;
         public InGameActions(@KControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_InGame_Move;
-        public InputAction @Rotate => m_Wrapper.m_InGame_Rotate;
+        public InputAction @LockTarget => m_Wrapper.m_InGame_LockTarget;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -157,9 +157,9 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnMove;
-                @Rotate.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnRotate;
-                @Rotate.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnRotate;
-                @Rotate.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnRotate;
+                @LockTarget.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnLockTarget;
+                @LockTarget.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnLockTarget;
+                @LockTarget.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnLockTarget;
             }
             m_Wrapper.m_InGameActionsCallbackInterface = instance;
             if (instance != null)
@@ -167,9 +167,9 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @Rotate.started += instance.OnRotate;
-                @Rotate.performed += instance.OnRotate;
-                @Rotate.canceled += instance.OnRotate;
+                @LockTarget.started += instance.OnLockTarget;
+                @LockTarget.performed += instance.OnLockTarget;
+                @LockTarget.canceled += instance.OnLockTarget;
             }
         }
     }
@@ -177,6 +177,6 @@ public partial class @KControls : IInputActionCollection2, IDisposable
     public interface IInGameActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnRotate(InputAction.CallbackContext context);
+        void OnLockTarget(InputAction.CallbackContext context);
     }
 }

@@ -15,13 +15,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Rotate",
+                    "name": "LockTarget",
                     "type": "Button",
                     "id": "ce6497a1-1f15-4fa7-9b45-1bab711d3bc3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -39,11 +39,11 @@
                 {
                     "name": "",
                     "id": "d6b32b5b-ed1e-4753-a865-c34bd0fa3743",
-                    "path": "",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Rotate",
+                    "action": "LockTarget",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
