@@ -15,13 +15,31 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LockTarget",
+                    "name": "NextTarget",
                     "type": "Button",
                     "id": "ce6497a1-1f15-4fa7-9b45-1bab711d3bc3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "BasicShoot",
+                    "type": "Button",
+                    "id": "8931c6ed-bb68-4224-b126-2ff614af94c1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetLock",
+                    "type": "Button",
+                    "id": "19d328a4-09a6-4c95-8bbc-c90ba86543ad",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -39,11 +57,33 @@
                 {
                     "name": "",
                     "id": "d6b32b5b-ed1e-4753-a865-c34bd0fa3743",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextTarget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aec755a4-e045-4ac2-99c5-8212a9cc1b8a",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LockTarget",
+                    "action": "BasicShoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "80a8cd4a-5c75-4569-962c-2326b5fc7822",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SetLock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

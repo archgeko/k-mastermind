@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     public BasicMovement basicMovement;
     public BasicShoot basicShoot;
+    public EnemyManager enemyManager;
     public InputUtil inputUtil;
 
     public Transform target;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         this.basicShoot = GetComponentInChildren<BasicShoot>();
+        this.enemyManager = FindObjectOfType<EnemyManager>();
         controls = new KControls();
         controls.InGame.Enable();
     }
@@ -26,7 +28,9 @@ public class PlayerController : MonoBehaviour
     {
         controls.InGame.Move.started += OnMove;
         controls.InGame.Move.performed += OnMove;
-        controls.InGame.LockTarget.started += OnLockTarget;
+        controls.InGame.NextTarget.started += OnNextTarget;
+        controls.InGame.BasicShoot.started += OnBasicShoot;
+        controls.InGame.SetLock.started += SetLock;
     }
 
 
@@ -35,8 +39,17 @@ public class PlayerController : MonoBehaviour
     {
         controls.InGame.Move.started -= OnMove;
         controls.InGame.Move.performed -= OnMove;
-        controls.InGame.LockTarget.started -= OnLockTarget;
-
+        controls.InGame.NextTarget.started -= OnNextTarget;
+        controls.InGame.BasicShoot.started -= OnBasicShoot;
+        controls.InGame.SetLock.started -= SetLock;
+    }
+    private void SetLock(InputAction.CallbackContext obj)
+    {
+        this.basicMovement.SetActiveLock(false);
+    }
+    private void OnBasicShoot(InputAction.CallbackContext obj)
+    {
+        this.basicShoot.Shoot();
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
@@ -46,13 +59,12 @@ public class PlayerController : MonoBehaviour
             basicMovement.SetMovementTargetPosition(inputUtil.CursorInWorldSpace);
         }
     }
-    private void OnLockTarget(InputAction.CallbackContext obj)
+    private void OnNextTarget(InputAction.CallbackContext obj)
     {
-        //EnemyClickableLogic
-
-        basicMovement.SetRotationTargetPosition(this.target);
-        this.basicShoot.Shoot();
-
+        // basicMovement.SetRotationTargetPosition(this.target);
+        basicMovement.SetActiveLock(true);
+        basicMovement.SetRotationTargetPosition(enemyManager.GetNextEnemy().transform);
+        // this.basicShoot.Shoot();
     }
 
     public void SetTarget()

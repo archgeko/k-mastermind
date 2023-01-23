@@ -10,6 +10,7 @@ public class BasicMovement : MonoBehaviour
 {
     public bool isRotating;
     public bool isMoving;
+    public bool isLocking;
     public bool canRotate;
     public bool canMove;
     public bool shouldBrake;
@@ -30,6 +31,7 @@ public class BasicMovement : MonoBehaviour
     #endregion
 
     public Transform target;
+    public Transform freeMovementTarget;
     public float rotationSpeed;
     private float rotationTreshold;
     private Quaternion rotationToAchieve;
@@ -60,10 +62,13 @@ public class BasicMovement : MonoBehaviour
         this.isMoving = true;
         this.shouldBrake = true;
     }
-
-    public void AimTarget()
+    public void SetActiveLock(bool active)
     {
-        SetRotationToAchieve(this.target.position);
+        this.isLocking = active;
+    }
+    public void AimTarget(Vector3 targetPosition)
+    {
+        SetRotationToAchieve(targetPosition);
         transform.rotation =
             Quaternion.Slerp(
                 transform.rotation,
@@ -85,14 +90,22 @@ public class BasicMovement : MonoBehaviour
         if (target.HasValue)
         {
             this.totalDistanceFromTarget = Vector3.Distance(transform.position, target.Value);
+            if (!isLocking)
+            {
+                this.freeMovementTarget.position = target.Value*1.5f; 
+                this.SetRotationTargetPosition(this.freeMovementTarget);
+            }
         }
     }
 
-    public void SetRotationToAchieve(Vector3 target)
+    public void SetRotationToAchieve(Vector3? target)
     {
-        var dir = (target - transform.position).normalized;
-        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
-        this.rotationToAchieve = Quaternion.AngleAxis(angle, Vector3.forward);
+        if (target.HasValue)
+        {
+            var dir = (target.Value - transform.position).normalized;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
+            this.rotationToAchieve = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
     }
 
     void FixedUpdate()
@@ -124,7 +137,7 @@ public class BasicMovement : MonoBehaviour
         {
             if (target != null)
             {
-                AimTarget();
+                AimTarget(this.target.position);
             }
         }
     }
@@ -133,7 +146,7 @@ public class BasicMovement : MonoBehaviour
     {
         float randomNumber = UnityEngine.Random.Range(0.0f, .05f);
         this.SetMovementTargetPosition(
-            this.transform.position 
+            this.transform.position
             +
              new Vector3(randomNumber, randomNumber, 0));
     }
@@ -143,7 +156,6 @@ public class BasicMovement : MonoBehaviour
         this.currentDistanceFromTarget = Vector3.Distance(transform.position, destination);
         if (this.currentDistanceFromTarget < stopMovementDistance)
         {
-            Debug.Log("shtoppp");
             rb.velocity = rb.velocity * 0.08f;
             SetMovementTargetPosition(null);
             this.isMoving = false;

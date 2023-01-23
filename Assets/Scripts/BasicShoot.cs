@@ -15,7 +15,7 @@ public class BasicShoot : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color=Color.red;
-        Gizmos.DrawLine(transform.position,transform.position+ transform.up*5);
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + transform.up * 10);
     }
 }

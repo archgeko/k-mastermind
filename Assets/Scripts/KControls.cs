@@ -37,13 +37,31 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""LockTarget"",
+                    ""name"": ""NextTarget"",
                     ""type"": ""Button"",
                     ""id"": ""ce6497a1-1f15-4fa7-9b45-1bab711d3bc3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""BasicShoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""8931c6ed-bb68-4224-b126-2ff614af94c1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""19d328a4-09a6-4c95-8bbc-c90ba86543ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -61,11 +79,33 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d6b32b5b-ed1e-4753-a865-c34bd0fa3743"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aec755a4-e045-4ac2-99c5-8212a9cc1b8a"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LockTarget"",
+                    ""action"": ""BasicShoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80a8cd4a-5c75-4569-962c-2326b5fc7822"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetLock"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -77,7 +117,9 @@ public partial class @KControls : IInputActionCollection2, IDisposable
         // InGame
         m_InGame = asset.FindActionMap("InGame", throwIfNotFound: true);
         m_InGame_Move = m_InGame.FindAction("Move", throwIfNotFound: true);
-        m_InGame_LockTarget = m_InGame.FindAction("LockTarget", throwIfNotFound: true);
+        m_InGame_NextTarget = m_InGame.FindAction("NextTarget", throwIfNotFound: true);
+        m_InGame_BasicShoot = m_InGame.FindAction("BasicShoot", throwIfNotFound: true);
+        m_InGame_SetLock = m_InGame.FindAction("SetLock", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -138,13 +180,17 @@ public partial class @KControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_InGame;
     private IInGameActions m_InGameActionsCallbackInterface;
     private readonly InputAction m_InGame_Move;
-    private readonly InputAction m_InGame_LockTarget;
+    private readonly InputAction m_InGame_NextTarget;
+    private readonly InputAction m_InGame_BasicShoot;
+    private readonly InputAction m_InGame_SetLock;
     public struct InGameActions
     {
         private @KControls m_Wrapper;
         public InGameActions(@KControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_InGame_Move;
-        public InputAction @LockTarget => m_Wrapper.m_InGame_LockTarget;
+        public InputAction @NextTarget => m_Wrapper.m_InGame_NextTarget;
+        public InputAction @BasicShoot => m_Wrapper.m_InGame_BasicShoot;
+        public InputAction @SetLock => m_Wrapper.m_InGame_SetLock;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -157,9 +203,15 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnMove;
-                @LockTarget.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnLockTarget;
-                @LockTarget.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnLockTarget;
-                @LockTarget.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnLockTarget;
+                @NextTarget.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnNextTarget;
+                @NextTarget.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnNextTarget;
+                @NextTarget.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnNextTarget;
+                @BasicShoot.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnBasicShoot;
+                @BasicShoot.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnBasicShoot;
+                @BasicShoot.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnBasicShoot;
+                @SetLock.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnSetLock;
+                @SetLock.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnSetLock;
+                @SetLock.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnSetLock;
             }
             m_Wrapper.m_InGameActionsCallbackInterface = instance;
             if (instance != null)
@@ -167,9 +219,15 @@ public partial class @KControls : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @LockTarget.started += instance.OnLockTarget;
-                @LockTarget.performed += instance.OnLockTarget;
-                @LockTarget.canceled += instance.OnLockTarget;
+                @NextTarget.started += instance.OnNextTarget;
+                @NextTarget.performed += instance.OnNextTarget;
+                @NextTarget.canceled += instance.OnNextTarget;
+                @BasicShoot.started += instance.OnBasicShoot;
+                @BasicShoot.performed += instance.OnBasicShoot;
+                @BasicShoot.canceled += instance.OnBasicShoot;
+                @SetLock.started += instance.OnSetLock;
+                @SetLock.performed += instance.OnSetLock;
+                @SetLock.canceled += instance.OnSetLock;
             }
         }
     }
@@ -177,6 +235,8 @@ public partial class @KControls : IInputActionCollection2, IDisposable
     public interface IInGameActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnLockTarget(InputAction.CallbackContext context);
+        void OnNextTarget(InputAction.CallbackContext context);
+        void OnBasicShoot(InputAction.CallbackContext context);
+        void OnSetLock(InputAction.CallbackContext context);
     }
 }
